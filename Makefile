@@ -5,6 +5,7 @@ init:
 	go get -u github.com/jackc/pgx/stdlib
 	go get -u github.com/mattn/go-sqlite3
 	go get -u github.com/go-sql-driver/mysql
+	go get -u github.com/mattn/go-oci8
 	go get -u github.com/ziutek/mymysql/...
 	go get -u github.com/denisenkom/go-mssqldb
 	go get -u github.com/AlekSi/pointer
@@ -92,6 +93,17 @@ test_denisenkom_go-mssqldb:
 	sqlcmd -b -I -S "$(REFORM_SQL_INSTANCE)" -d "reform-test" -i internal/test/sql/mssql_data.sql
 	sqlcmd -b -I -S "$(REFORM_SQL_INSTANCE)" -d "reform-test" -i internal/test/sql/mssql_set.sql
 	go test -coverprofile=test_denisenkom_go-mssqldb.cover
+
+# TODO: Use sqlplus etc.
+test_mattn_go-oci8: export REFORM_TEST_DRIVER = oci8
+test_mattn_go-oci8: export REFORM_TEST_SOURCE = root@/reform-test?parseTime=true&strict=true&sql_notes=false&time_zone='America%2FNew_York'
+test_mattn_go-oci8:
+	echo 'DROP DATABASE IF EXISTS `reform-test`;' | mysql -uroot
+	echo 'CREATE DATABASE `reform-test`;' | mysql -uroot
+	mysql -uroot reform-test < internal/test/sql/mysql_init.sql
+	mysql -uroot reform-test < internal/test/sql/data.sql
+	mysql -uroot reform-test < internal/test/sql/mysql_set.sql
+	go test -coverprofile=test_mattn_go-oci8.cover
 
 parse:
 	# nothing, hack for our Travis-CI configuration
