@@ -139,6 +139,9 @@ const (
 
 	// SelectTop is a method using "SELECT TOP N" SQL syntax.
 	SelectTop
+
+	// RowNum is a method using "ROWNUM <= N" SQL syntax.
+	RowNum
 )
 
 // DefaultValuesMethod is a method of inserting of row with all default values.
