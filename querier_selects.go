@@ -138,7 +138,7 @@ func (q *Querier) findTail(view string, column string, arg interface{}, limit1 b
 
 	// TODO: Check if WHERE clause exists
 	if limit1 && q.SelectLimitMethod() == RowNum {
-		tail += " ROWNUM = 1"
+		tail += " AND ROWNUM = 1"
 	}
 
 	return
