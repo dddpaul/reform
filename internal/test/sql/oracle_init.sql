@@ -9,15 +9,13 @@ CREATE TABLE "people" (
   "email" varchar2(40),
   "created_at" timestamp with time zone NOT NULL,
   "updated_at" timestamp with time zone
-  -- created_at timestamp without time zone NOT NULL,
-  -- updated_at timestamp without time zone
 );
 
 CREATE TABLE "projects" (
   "name" varchar2(40) NOT NULL,
   "id" varchar2(40) PRIMARY KEY,
-  "start" date NOT NULL,
-  "end" date
+  "start" timestamp with time zone NOT NULL,
+  "end" timestamp with time zone
 );
 
 CREATE TABLE "person_project" (
