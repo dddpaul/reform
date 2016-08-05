@@ -13,6 +13,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/jackc/pgx/stdlib"
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-oci8"
 	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/ziutek/mymysql/godrv"
 
@@ -24,6 +25,7 @@ import (
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/mssql"
 	"gopkg.in/reform.v1/dialects/mysql"
+	"gopkg.in/reform.v1/dialects/oracle"
 	"gopkg.in/reform.v1/dialects/postgresql"
 	"gopkg.in/reform.v1/dialects/sqlite3"
 	. "gopkg.in/reform.v1/internal/test/models"
@@ -89,6 +91,9 @@ func TestMain(m *testing.M) {
 
 	case "mssql":
 		dialect = mssql.Dialect
+
+	case "oci8":
+		dialect = oracle.Dialect
 
 	default:
 		log.Fatal("reform: no dialect for driver " + driver)

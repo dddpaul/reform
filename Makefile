@@ -94,15 +94,12 @@ test_denisenkom_go-mssqldb:
 	sqlcmd -b -I -S "$(REFORM_SQL_INSTANCE)" -d "reform-test" -i internal/test/sql/mssql_set.sql
 	go test -coverprofile=test_denisenkom_go-mssqldb.cover
 
-# TODO: Use sqlplus etc.
+# this target requires Oracle sqlplus client
 test_mattn_go-oci8: export REFORM_TEST_DRIVER = oci8
-test_mattn_go-oci8: export REFORM_TEST_SOURCE = root@/reform-test?parseTime=true&strict=true&sql_notes=false&time_zone='America%2FNew_York'
+test_mattn_go-oci8: export REFORM_TEST_SOURCE = system/oracle@localhost/xe
 test_mattn_go-oci8:
-	echo 'DROP DATABASE IF EXISTS `reform-test`;' | mysql -uroot
-	echo 'CREATE DATABASE `reform-test`;' | mysql -uroot
-	mysql -uroot reform-test < internal/test/sql/mysql_init.sql
-	mysql -uroot reform-test < internal/test/sql/data.sql
-	mysql -uroot reform-test < internal/test/sql/mysql_set.sql
+	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_init.sql
+	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_data.sql
 	go test -coverprofile=test_mattn_go-oci8.cover
 
 parse:
