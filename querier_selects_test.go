@@ -20,17 +20,17 @@ var (
 
 func (s *ReformSuite) TestSelectOneTo() {
 	var person Person
-	err := s.q.SelectOneTo(&person, "WHERE id = "+s.q.Placeholder(1), 1)
+	err := s.q.SelectOneTo(&person, "WHERE "+s.q.QuoteIdentifier("id")+" = "+s.q.Placeholder(1), 1)
 	s.NoError(err)
 	s.Equal(Person{ID: 1, GroupID: pointer.ToInt32(65534), Name: "Denis Mills", CreatedAt: goCreated}, person)
 
 	var project Project
-	err = s.q.SelectOneTo(&project, "WHERE id = "+s.q.Placeholder(1), "baron")
+	err = s.q.SelectOneTo(&project, "WHERE "+s.q.QuoteIdentifier("id")+" = "+s.q.Placeholder(1), "baron")
 	s.NoError(err)
 	expected := Project{ID: "baron", Name: "Vicious Baron", Start: baronStart, End: &baronEnd}
 	s.Equal(expected, project)
 
-	err = s.q.SelectOneTo(&project, "WHERE id IS NULL")
+	err = s.q.SelectOneTo(&project, "WHERE "+s.q.QuoteIdentifier("id")+" IS NULL")
 	s.Equal(expected, project) // expect old value
 	s.Equal(reform.ErrNoRows, err)
 
@@ -41,15 +41,15 @@ func (s *ReformSuite) TestSelectOneTo() {
 }
 
 func (s *ReformSuite) TestSelectOneFrom() {
-	person, err := s.q.SelectOneFrom(PersonTable, "WHERE id = "+s.q.Placeholder(1), 1)
+	person, err := s.q.SelectOneFrom(PersonTable, "WHERE "+s.q.QuoteIdentifier("id")+" = "+s.q.Placeholder(1), 1)
 	s.NoError(err)
 	s.Equal(&Person{ID: 1, GroupID: pointer.ToInt32(65534), Name: "Denis Mills", CreatedAt: goCreated}, person)
 
-	project, err := s.q.SelectOneFrom(ProjectTable, "WHERE id = "+s.q.Placeholder(1), "baron")
+	project, err := s.q.SelectOneFrom(ProjectTable, "WHERE "+s.q.QuoteIdentifier("id")+" = "+s.q.Placeholder(1), "baron")
 	s.NoError(err)
 	s.Equal(&Project{ID: "baron", Name: "Vicious Baron", Start: baronStart, End: &baronEnd}, project)
 
-	project, err = s.q.SelectOneFrom(ProjectTable, "WHERE id IS NULL")
+	project, err = s.q.SelectOneFrom(ProjectTable, "WHERE "+s.q.QuoteIdentifier("id")+" IS NULL")
 	s.Nil(project)
 	s.Equal(reform.ErrNoRows, err)
 
@@ -59,7 +59,7 @@ func (s *ReformSuite) TestSelectOneFrom() {
 }
 
 func (s *ReformSuite) TestSelectRows() {
-	rows, err := s.q.SelectRows(PersonTable, "WHERE name = "+s.q.Placeholder(1)+" ORDER BY id", "Elfrieda Abbott")
+	rows, err := s.q.SelectRows(PersonTable, "WHERE "+s.q.QuoteIdentifier("name")+" = "+s.q.Placeholder(1)+" ORDER BY "+s.q.QuoteIdentifier("id"), "Elfrieda Abbott")
 	s.NotNil(rows)
 	s.NoError(err)
 	defer rows.Close()
@@ -79,7 +79,7 @@ func (s *ReformSuite) TestSelectRows() {
 	s.Equal(err, reform.ErrNoRows)
 	s.Equal(expected, person) // expect old value
 
-	rows, err = s.q.SelectRows(ProjectTable, "WHERE id IS NULL")
+	rows, err = s.q.SelectRows(ProjectTable, "WHERE "+s.q.QuoteIdentifier("id")+" IS NULL")
 	s.NotNil(rows)
 	s.NoError(err)
 	defer rows.Close()
@@ -96,7 +96,7 @@ func (s *ReformSuite) TestSelectRows() {
 }
 
 func (s *ReformSuite) TestSelectAllFrom() {
-	structs, err := s.q.SelectAllFrom(PersonTable, "WHERE name = "+s.q.Placeholder(1)+" ORDER BY id", "Elfrieda Abbott")
+	structs, err := s.q.SelectAllFrom(PersonTable, "WHERE "+s.q.QuoteIdentifier("name")+" = "+s.q.Placeholder(1)+" ORDER BY "+s.q.QuoteIdentifier("id"), "Elfrieda Abbott")
 	s.NoError(err)
 	s.Len(structs, 2)
 	s.Equal([]reform.Struct{
@@ -104,7 +104,7 @@ func (s *ReformSuite) TestSelectAllFrom() {
 		&Person{ID: 103, GroupID: pointer.ToInt32(65534), Name: "Elfrieda Abbott", CreatedAt: personCreated},
 	}, structs)
 
-	structs, err = s.q.SelectAllFrom(ProjectTable, "WHERE id IS NULL")
+	structs, err = s.q.SelectAllFrom(ProjectTable, "WHERE "+s.q.QuoteIdentifier("id")+" IS NULL")
 	s.Nil(structs)
 	s.NoError(err)
 
@@ -280,7 +280,7 @@ func (s *ReformSuite) TestSelectsSchema() {
 	}
 
 	var legacyPerson LegacyPerson
-	err := s.q.SelectOneTo(&legacyPerson, "WHERE id = "+s.q.Placeholder(1), 1001)
+	err := s.q.SelectOneTo(&legacyPerson, "WHERE "+s.q.QuoteIdentifier("id")+" = "+s.q.Placeholder(1), 1001)
 	s.NoError(err)
 	s.Equal(LegacyPerson{ID: 1001, Name: pointer.ToString("Amelia Heathcote")}, legacyPerson)
 

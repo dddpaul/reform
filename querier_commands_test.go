@@ -333,16 +333,16 @@ func (s *ReformSuite) TestDelete() {
 }
 
 func (s *ReformSuite) TestDeleteFrom() {
-	ra, err := s.q.DeleteFrom(PersonTable, "WHERE email IS NULL")
+	ra, err := s.q.DeleteFrom(PersonTable, "WHERE "+s.q.QuoteIdentifier("email")+" IS NULL")
 	s.NoError(err)
 	s.Equal(uint(3), ra)
 
-	ra, err = s.q.DeleteFrom(PersonTable, "WHERE email IS NULL")
+	ra, err = s.q.DeleteFrom(PersonTable, "WHERE "+s.q.QuoteIdentifier("email")+" IS NULL")
 	s.NoError(err)
 	s.Equal(uint(0), ra)
 
 	// -1 second for SQLite3, otherwise it also deletes queen itself ¯\_(ツ)_/¯
-	ra, err = s.q.DeleteFrom(ProjectTable, "WHERE start < "+s.q.Placeholder(1), queenStart.Add(-time.Second))
+	ra, err = s.q.DeleteFrom(ProjectTable, "WHERE "+s.q.QuoteIdentifier("start")+" < "+s.q.Placeholder(1), queenStart.Add(-time.Second))
 	s.NoError(err)
 	s.Equal(uint(3), ra)
 
