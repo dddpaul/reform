@@ -13,9 +13,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/jackc/pgx/stdlib"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-oci8"
 	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/ziutek/mymysql/godrv"
+	_ "gopkg.in/rana/ora.v3"
 
 	"github.com/AlekSi/pointer"
 	"github.com/enodata/faker"
@@ -92,7 +92,7 @@ func TestMain(m *testing.M) {
 	case "mssql":
 		dialect = mssql.Dialect
 
-	case "oci8":
+	case "ora":
 		dialect = oracle.Dialect
 
 	default:

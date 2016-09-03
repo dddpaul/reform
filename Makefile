@@ -5,7 +5,7 @@ init:
 	go get -u github.com/jackc/pgx/stdlib
 	go get -u github.com/mattn/go-sqlite3
 	go get -u github.com/go-sql-driver/mysql
-	go get -u github.com/mattn/go-oci8
+	go get -u gopkg.in/rana/ora.v3
 	go get -u github.com/ziutek/mymysql/...
 	go get -u github.com/denisenkom/go-mssqldb
 	go get -u github.com/AlekSi/pointer
@@ -95,12 +95,12 @@ test_denisenkom_go-mssqldb:
 	go test -coverprofile=test_denisenkom_go-mssqldb.cover
 
 # this target requires Oracle sqlplus client
-test_mattn_go-oci8: export REFORM_TEST_DRIVER = oci8
-test_mattn_go-oci8: export REFORM_TEST_SOURCE = system/oracle@localhost/xe
-test_mattn_go-oci8:
+test_rana-ora: export REFORM_TEST_DRIVER = ora
+test_rana-ora: export REFORM_TEST_SOURCE = system/oracle@localhost/xe
+test_rana-ora:
 	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_init.sql
 	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_data.sql
-	go test -coverprofile=test_mattn_go-oci8.cover
+	go test -coverprofile=test_rana-ora.cover
 
 parse:
 	# nothing, hack for our Travis-CI configuration

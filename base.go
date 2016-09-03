@@ -126,6 +126,9 @@ const (
 	// Returning is method using "RETURNING id" SQL syntax.
 	Returning
 
+	// ReturningInto is method using "RETURNING id INTO" SQL syntax.
+	ReturningInto
+
 	// OutputInserted is method using "OUTPUT INSERTED.id" SQL syntax.
 	OutputInserted
 )

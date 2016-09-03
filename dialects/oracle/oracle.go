@@ -30,7 +30,7 @@ func (oracle) QuoteIdentifier(identifier string) string {
 }
 
 func (oracle) LastInsertIdMethod() reform.LastInsertIdMethod {
-	return reform.Returning
+	return reform.ReturningInto
 }
 
 func (oracle) SelectLimitMethod() reform.SelectLimitMethod {

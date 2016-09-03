@@ -82,9 +82,15 @@ func (q *Querier) insert(str Struct, columns []string, values []interface{}) err
 	if record != nil && lastInsertIdMethod == Returning {
 		query += fmt.Sprintf(" RETURNING %s", q.QuoteIdentifier(view.Columns()[pk]))
 	}
+	if record != nil && lastInsertIdMethod == ReturningInto {
+		// Use LastInsertId workaround from https://github.com/rana/ora with extra placeholder and pass zero to it
+		extraPlaceholder := q.Placeholders(1, len(columns)+1)[len(columns)]
+		query += fmt.Sprintf(" RETURNING %s /*LastInsertId*/ INTO %s", q.QuoteIdentifier(view.Columns()[pk]), extraPlaceholder)
+		values = append(values, 0)
+	}
 
 	switch lastInsertIdMethod {
-	case LastInsertId:
+	case LastInsertId, ReturningInto:
 		res, err := q.Exec(query, values...)
 		if err != nil {
 			return err
