@@ -9,6 +9,10 @@ import (
 
 type oracle struct{}
 
+func (oracle) String() string {
+	return "oracle"
+}
+
 func (oracle) Placeholder(index int) string {
 	return ":" + strconv.Itoa(index)
 }
@@ -31,6 +35,10 @@ func (oracle) LastInsertIdMethod() reform.LastInsertIdMethod {
 
 func (oracle) SelectLimitMethod() reform.SelectLimitMethod {
 	return reform.RowNum
+}
+
+func (oracle) DefaultValuesMethod() reform.DefaultValuesMethod {
+	return reform.DefaultValues
 }
 
 // Dialect implements reform.Dialect for oracle.
