@@ -96,10 +96,10 @@ test_denisenkom_go-mssqldb:
 
 # this target requires Oracle sqlplus client
 test_rana-ora: export REFORM_TEST_DRIVER = ora
-test_rana-ora: export REFORM_TEST_SOURCE = system/oracle@localhost/xe
+test_rana-ora: export REFORM_TEST_SOURCE = system/oracle@localhost/xe.oracle.docker
 test_rana-ora:
-	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_init.sql
-	sqlplus -S "system/oracle@localhost/xe" @internal/test/sql/oracle_data.sql
+	sqlplus -S "system/oracle@localhost/xe.oracle.docker" @internal/test/sql/oracle_init.sql
+	sqlplus -S "system/oracle@localhost/xe.oracle.docker" @internal/test/sql/oracle_data.sql
 	go test -coverprofile=test_rana-ora.cover
 
 parse:
