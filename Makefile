@@ -5,7 +5,6 @@ init:
 	go get -u github.com/jackc/pgx/stdlib
 	go get -u github.com/mattn/go-sqlite3
 	go get -u github.com/go-sql-driver/mysql
-	go get -u gopkg.in/rana/ora.v3
 	go get -u github.com/ziutek/mymysql/...
 	go get -u github.com/denisenkom/go-mssqldb
 	go get -u github.com/AlekSi/pointer
